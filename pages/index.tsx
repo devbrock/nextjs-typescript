@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Film from "../components/Film";
-import Films from "../components/Films";
 import Homeworld from "../components/Homeworld";
+import Vehicles from "../components/Vehicles";
 
 // write the type for our character
 type Character = {
@@ -55,6 +55,14 @@ export default function Home({ character }: CharacterProps) {
           {character.films.map((film, index) => (
             <Film key={index} url={film} />
           ))}
+
+          {/* example of passing an array through props */}
+          {character.vehicles.length > 0 && (
+            <>
+              <p className="font-mono font-semibold text-xl pt-4">Vehicles</p>
+              <Vehicles vehicleUrls={character.vehicles} />
+            </>
+          )}
         </div>
       </main>
     </div>
