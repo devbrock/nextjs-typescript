@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useState } from "react";
 import Film from "../components/Film";
 import Homeworld from "../components/Homeworld";
 import Vehicles from "../components/Vehicles";
@@ -28,7 +29,24 @@ type CharacterProps = {
   character: Character;
 };
 
+let listOfCharacters : {name: string, url: string}[] = [
+  {name: "Luke Skywalker", url: "https://swapi.dev/api/people/1/"},
+  {name: "C-3P0", url: "https://swapi.dev/api/people/2/"},
+  {name: "Darth Vader", url: "https://swapi.dev/api/people/4/"},
+  {name: "Obi-Wan Kenobi", url: "https://swapi.dev/api/people/10/"},
+]
+
 export default function Home({ character }: CharacterProps) {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character>()
+
+
+  async function handleClick(character: {name: string, url: string}) {
+    let res = await fetch(character.url)
+    let data: Character = await res.json();
+    console.log(data);
+    setSelectedCharacter(data)
+  }
+
   // type our props
   return (
     <div>
@@ -43,27 +61,38 @@ export default function Home({ character }: CharacterProps) {
           Welcome to <a href="https://nextjs.org">Next.js + Typescript!</a>
         </h1>
         <div className="py-8">
+          <ul className='flex space-x-4 justify-center'>
+            {listOfCharacters.map(character => (
+              <li key={character.name} onClick={() => handleClick(character)}>
+                {character.name}
+                </li>
+            ))}
+          </ul>
+        </div>
+        {selectedCharacter !== undefined && 
+        <div className="py-8 max-w-md mx-auto text-center">
           {/* pass our character data from the props as we normally would */}
-          <h2 className="font-semibold text-2xl">{character.name}</h2>
+          <h2 className="font-semibold text-2xl">{selectedCharacter.name}</h2>
 
           {/* example of passing data to a component */}
           <p className="font-mono font-semibold text-xl pt-4">Home World</p>
-          <Homeworld worldUrl={character.homeworld} />
+          <Homeworld worldUrl={selectedCharacter.homeworld} />
 
           {/* example of mapping over an array and returning multiple components */}
           <p className="font-mono font-semibold text-xl pt-4">Films</p>
-          {character.films.map((film, index) => (
+          {selectedCharacter.films.map((film, index) => (
             <Film key={index} url={film} />
           ))}
 
           {/* example of passing an array through props */}
-          {character.vehicles.length > 0 && (
+          {selectedCharacter.vehicles.length > 0 && (
             <>
               <p className="font-mono font-semibold text-xl pt-4">Vehicles</p>
-              <Vehicles vehicleUrls={character.vehicles} />
+              <Vehicles vehicleUrls={selectedCharacter.vehicles} />
             </>
           )}
         </div>
+}
       </main>
     </div>
   );

@@ -33,10 +33,11 @@ export default function Vehicles({ vehicleUrls }: vehicleProps) {
   }
 
   useEffect(() => {
+    setVehicles([]);
     vehicleUrls.map((url) => {
       getVehicleName(url);
     });
-  }, []);
+  }, [vehicleUrls]);
 
   return (
     <div>
