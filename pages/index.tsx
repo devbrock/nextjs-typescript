@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from 'next/image'
 import { useState } from "react";
 import Film from "../components/Film";
 import Homeworld from "../components/Homeworld";
@@ -22,6 +23,7 @@ type Character = {
   created: string;
   edited: string;
   url: string;
+  image: string;
 };
 
 // write the type for our props
@@ -43,6 +45,8 @@ export default function Home({ character }: CharacterProps) {
   async function handleClick(character: {name: string, url: string}) {
     let res = await fetch(character.url)
     let data: Character = await res.json();
+    let id = character.url.substring(0, character.url.length - 1).split("/").pop()
+    data.image = `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`
     console.log(data);
     setSelectedCharacter(data)
   }
@@ -73,6 +77,9 @@ export default function Home({ character }: CharacterProps) {
         <div className="py-8 max-w-md mx-auto text-center">
           {/* pass our character data from the props as we normally would */}
           <h2 className="font-semibold text-2xl">{selectedCharacter.name}</h2>
+          <div className="my-8">
+          <Image src={selectedCharacter.image} width={400} height={550}/>
+          </div>
 
           {/* example of passing data to a component */}
           <p className="font-mono font-semibold text-xl pt-4">Home World</p>
