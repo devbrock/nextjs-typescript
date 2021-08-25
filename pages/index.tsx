@@ -28,7 +28,7 @@ type Character = {
 
 // write the type for our props
 type CharacterProps = {
-  character: Character;
+  characters: Character[];
 };
 
 let listOfCharacters : {name: string, url: string}[] = [
@@ -38,8 +38,9 @@ let listOfCharacters : {name: string, url: string}[] = [
   {name: "Obi-Wan Kenobi", url: "https://swapi.dev/api/people/10/"},
 ]
 
-export default function Home({ character }: CharacterProps) {
+export default function Home({ characters }: CharacterProps) {
   const [selectedCharacter, setSelectedCharacter] = useState<Character>()
+  console.log(characters);
 
 
   async function handleClick(character: {name: string, url: string}) {
@@ -60,44 +61,46 @@ export default function Home({ character }: CharacterProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto p-16 text-gray-900">
+      <main className="container-xl min-h-screen bg-white mx-auto p-16 text-black">
         <h1 className="font-bold text-4xl text-center">
-          Welcome to <a href="https://nextjs.org">Next.js + Typescript!</a>
+          Star Wars + Next.js + Typescript! 🔥
         </h1>
         <div className="py-8">
           <ul className='flex space-x-4 justify-center'>
-            {listOfCharacters.map(character => (
-              <li key={character.name} onClick={() => handleClick(character)}>
+            {characters.map(character => (
+              <li className="px-2 py-4 cursor-pointer bg-red-500 hover:bg-red-600 text-white font-semibold  rounded shadow" key={character.name} onClick={() => handleClick(character)}>
                 {character.name}
                 </li>
             ))}
           </ul>
         </div>
         {selectedCharacter !== undefined && 
-        <div className="py-8 max-w-md mx-auto text-center">
+        <div className="py-8 grid grid-cols-2">
           {/* pass our character data from the props as we normally would */}
-          <h2 className="font-semibold text-2xl">{selectedCharacter.name}</h2>
-          <div className="my-8">
-          <Image src={selectedCharacter.image} width={400} height={550}/>
+          <div>
+            <h2 className="font-semibold text-2xl">{selectedCharacter.name}</h2>
+            <div className="my-8">
+            <Image src={selectedCharacter.image} width={400} height={550}/>
+            </div>
           </div>
 
           {/* example of passing data to a component */}
-          <p className="font-mono font-semibold text-xl pt-4">Home World</p>
-          <Homeworld worldUrl={selectedCharacter.homeworld} />
-
-          {/* example of mapping over an array and returning multiple components */}
-          <p className="font-mono font-semibold text-xl pt-4">Films</p>
-          {selectedCharacter.films.map((film, index) => (
-            <Film key={index} url={film} />
-          ))}
-
-          {/* example of passing an array through props */}
-          {selectedCharacter.vehicles.length > 0 && (
-            <>
-              <p className="font-mono font-semibold text-xl pt-4">Vehicles</p>
-              <Vehicles vehicleUrls={selectedCharacter.vehicles} />
-            </>
-          )}
+          <div>
+            <p className="font-mono font-semibold text-xl pt-4">Home World</p>
+            <Homeworld worldUrl={selectedCharacter.homeworld} />
+            {/* example of mapping over an array and returning multiple components */}
+            <p className="font-mono font-semibold text-xl pt-4">Films</p>
+            {selectedCharacter.films.map((film, index) => (
+              <Film key={index} url={film} />
+            ))}
+            {/* example of passing an array through props */}
+            {selectedCharacter.vehicles.length > 0 && (
+              <>
+                <p className="font-mono font-semibold text-xl pt-4">Vehicles</p>
+                <Vehicles vehicleUrls={selectedCharacter.vehicles} />
+              </>
+            )}
+          </div>
         </div>
 }
       </main>
@@ -107,11 +110,12 @@ export default function Home({ character }: CharacterProps) {
 
 export async function getStaticProps() {
   // normal fetch request
-  let res = await fetch("https://swapi.dev/api/people/1");
+  let res = await fetch("https://swapi.dev/api/people/");
   // type the response json object as type Character
-  let character: Character = await res.json();
+  let data = await res.json();
+  let characters: Character[] = data.results;
 
   return {
-    props: { character }, // will be passed to the page component as props
+    props: { characters }, // will be passed to the page component as props
   };
 }

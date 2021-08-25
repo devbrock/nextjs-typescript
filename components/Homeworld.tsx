@@ -22,7 +22,7 @@ type worldProps = {
   worldUrl: string;
 };
 
-export default function Homeworld(url: worldProps) {
+export default function Homeworld({worldUrl}: worldProps) {
   const [world, setWorld] = useState("Loading...");
 
   async function fetchWorld(url: string) {
@@ -32,8 +32,9 @@ export default function Homeworld(url: worldProps) {
   }
 
   useEffect(() => {
-    fetchWorld(url.worldUrl);
-  }, []);
+    setWorld("Loading...")
+    fetchWorld(worldUrl);
+  }, [worldUrl]);
 
-  return <div>{world}</div>;
+  return <div className='text-lg'>{world}</div>;
 }

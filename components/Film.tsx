@@ -31,8 +31,9 @@ export default function Film({ url }: filmProps, key: number) {
   }
 
   useEffect(() => {
+    setFilmTitle("Loading...")
     fetchMovieTitle(url);
-  }, []);
+  }, [url]);
 
   return <p key={key}>{filmTitle}</p>;
 }
