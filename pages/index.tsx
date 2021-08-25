@@ -40,7 +40,7 @@ let listOfCharacters : {name: string, url: string}[] = [
 
 export default function Home({ characters }: CharacterProps) {
   const [selectedCharacter, setSelectedCharacter] = useState<Character>()
-  console.log(characters);
+
 
 
   async function handleClick(character: {name: string, url: string}) {
@@ -48,7 +48,7 @@ export default function Home({ characters }: CharacterProps) {
     let data: Character = await res.json();
     let id = character.url.substring(0, character.url.length - 1).split("/").pop()
     data.image = `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`
-    console.log(data);
+
     setSelectedCharacter(data)
   }
 
@@ -80,7 +80,7 @@ export default function Home({ characters }: CharacterProps) {
           <div>
             <h2 className="font-semibold text-2xl">{selectedCharacter.name}</h2>
             <div className="my-8">
-            <Image src={selectedCharacter.image} width={400} height={550}/>
+            <Image src={selectedCharacter.image} width={400} height={550} priority/>
             </div>
           </div>
 
