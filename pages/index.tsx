@@ -31,24 +31,14 @@ type CharacterProps = {
   characters: Character[];
 };
 
-let listOfCharacters : {name: string, url: string}[] = [
-  {name: "Luke Skywalker", url: "https://swapi.dev/api/people/1/"},
-  {name: "C-3P0", url: "https://swapi.dev/api/people/2/"},
-  {name: "Darth Vader", url: "https://swapi.dev/api/people/4/"},
-  {name: "Obi-Wan Kenobi", url: "https://swapi.dev/api/people/10/"},
-]
-
 export default function Home({ characters }: CharacterProps) {
   const [selectedCharacter, setSelectedCharacter] = useState<Character>()
-
-
 
   async function handleClick(character: {name: string, url: string}) {
     let res = await fetch(character.url)
     let data: Character = await res.json();
     let id = character.url.substring(0, character.url.length - 1).split("/").pop()
     data.image = `https://starwars-visualguide.com/assets/img/characters/${id}.jpg`
-
     setSelectedCharacter(data)
   }
 
