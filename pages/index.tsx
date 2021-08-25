@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from 'next/image'
-import { useState } from "react";
+import {useState} from "react";
 import Film from "../components/Film";
 import Homeworld from "../components/Homeworld";
 import Vehicles from "../components/Vehicles";

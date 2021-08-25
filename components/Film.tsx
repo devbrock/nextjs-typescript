@@ -25,7 +25,7 @@ export default function Film({ url }: filmProps, key: number) {
   const [filmTitle, setFilmTitle] = useState("Loading...");
   async function fetchMovieTitle(url: string) {
     let res = await fetch(url);
-    let data = await res.json();
+    let data: Film = await res.json();
     let { title } = data;
     setFilmTitle(title);
   }
